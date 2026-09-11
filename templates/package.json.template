@@ -1,11 +1,11 @@
 {
-    "name": "@hurshb50/setup-cli",
+    "name": "@hurshb50/{{cliName}}",
     "version": "0.0.0",
     "type": "module",
     "files": [
         "distribution"
     ],
-    "bin": "./distribution/setup-cli.js",
+    "bin": "./distribution/{{cliName}}.js",
     "scripts": {
         "build": "vp pack",
         "check": "vp check",
@@ -15,8 +15,8 @@
     },
     "dependencies": {
         "@commander-js/extra-typings": "^15.0.0",
-        "@types/node": "^22.20.2",
-        "handlebars": "^4.7.9",
+        "@types/bun": "latest",
+        "bumpp": "^11.1.0",
         "typescript": "^7.0.2",
         "vite": "npm:@voidzero-dev/vite-plus-core@0.3.1",
         "vite-plus": "^0.2.4"
@@ -31,16 +31,16 @@
             "onFail": "download"
         }
     },
-    "description": "This tool helps to scaffold a CLI that you can publish to NPM.",
-    "homepage": "https://github.com/hurshb50/setup-cli#readme",
+    "description": "TODO",
+    "homepage": "https://github.com/hurshb50/{{cliName}}#readme",
     "bugs": {
-        "url": "https://github.com/hurshb50/setup-cli/issues"
+        "url": "https://github.com/hurshb50/{{cliName}}/issues"
     },
     "license": "MIT",
     "author": "Hursh Patel <hurshb50@gmail.com>",
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/hurshb50/setup-cli.git"
+        "url": "git+https://github.com/hurshb50/{{cliName}}.git"
     },
     "publishConfig": {
         "access": "public"

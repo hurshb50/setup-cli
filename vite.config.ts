@@ -1,11 +1,8 @@
 import { defineConfig } from "vite-plus";
-import { readdirSync } from "fs";
+import path from "path";
 
-const entries = readdirSync(".", { withFileTypes: true });
-
-const entryNames = entries
-    .map(({ name }) => name)
-    .filter((name) => !name.match(/bun.lock|distribution|node_modules|source/));
+const distributionDirectory = path.join(import.meta.dirname, "distribution");
+const assetsDirectory = path.join(distributionDirectory, "assets");
 
 const configuration = defineConfig({
     fmt: {
@@ -23,8 +20,13 @@ const configuration = defineConfig({
     pack: {
         entry: "./source/setup-cli.ts",
         outDir: "distribution",
-        minify: true,
-        copy: entryNames,
+        copy: [
+            "templates",
+            { from: ".zed", to: assetsDirectory },
+            { from: ".gitignore", to: assetsDirectory },
+            { from: "AGENTS.md", to: assetsDirectory },
+            { from: "tsconfig.json", to: assetsDirectory },
+        ],
     },
     test: { passWithNoTests: true },
 });
