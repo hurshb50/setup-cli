@@ -23,7 +23,7 @@ jobs:
               run: vp install
 
             - name: Build Application
-              run: vp build
+              run: vp run build
 
             - name: Publish to npm
               run: vp pm publish
