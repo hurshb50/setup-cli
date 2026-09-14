@@ -1,0 +1,93 @@
+import path from "path";
+import fs from "fs/promises";
+import { afterEach, describe, expect, it } from "vitest";
+import { renderTemplates } from "../source/render-templates";
+import { TemporaryDirectoryManager } from "./temporary-directory-manager";
+
+const temporaryDirectories = new TemporaryDirectoryManager();
+
+afterEach(() => temporaryDirectories.removeAll());
+
+const renderValues = {
+    cliName: "my-cli",
+    personalGithubUsername: "octocat",
+    personalName: "Mona Lisa",
+    personalEmail: "mona@example.com",
+};
+
+describe("renderTemplates", () => {
+    it("renders each template with the provided values and strips the '.template' suffix", async () => {
+        const currentDirectoryPath = await temporaryDirectories.create();
+        const temporaryDirectoryPath = await temporaryDirectories.create();
+
+        const templatesDirectoryPath = path.join(currentDirectoryPath, "templates");
+        await fs.mkdir(templatesDirectoryPath);
+        await fs.writeFile(
+            path.join(templatesDirectoryPath, "readme.md.template"),
+            "# {{cliName}} by {{personalName}} <{{personalEmail}}> from @{{personalGithubUsername}}",
+        );
+        await fs.writeFile(
+            path.join(templatesDirectoryPath, "package.json.template"),
+            '{"name": "@{{personalGithubUsername}}/{{cliName}}"}',
+        );
+
+        await renderTemplates(
+            currentDirectoryPath,
+            temporaryDirectoryPath,
+            renderValues.cliName,
+            renderValues.personalGithubUsername,
+            renderValues.personalName,
+            renderValues.personalEmail,
+        );
+
+        const readmeContent = await fs.readFile(path.join(temporaryDirectoryPath, "readme.md"), "utf8");
+        expect(readmeContent).toBe("# my-cli by Mona Lisa <mona@example.com> from @octocat");
+
+        const packageJsonContent = await fs.readFile(path.join(temporaryDirectoryPath, "package.json"), "utf8");
+        expect(JSON.parse(packageJsonContent)).toEqual({ name: "@octocat/my-cli" });
+    });
+
+    it("renders the repository templates without leaving unrendered placeholders", async () => {
+        const repositoryRootPath = path.resolve(import.meta.dirname, "..");
+        const temporaryDirectoryPath = await temporaryDirectories.create();
+
+        await renderTemplates(
+            repositoryRootPath,
+            temporaryDirectoryPath,
+            renderValues.cliName,
+            renderValues.personalGithubUsername,
+            renderValues.personalName,
+            renderValues.personalEmail,
+        );
+
+        const packageJsonContent = await fs.readFile(path.join(temporaryDirectoryPath, "package.json"), "utf8");
+        const packageJson = JSON.parse(packageJsonContent) as Record<string, unknown>;
+        expect(packageJson.name).toBe("@octocat/my-cli");
+        expect(packageJson.author).toBe("Mona Lisa <mona@example.com>");
+        expect(packageJson.repository).toEqual({
+            type: "git",
+            url: "git+https://github.com/octocat/my-cli.git",
+        });
+        expect(packageJsonContent).not.toContain("{{");
+    });
+
+    it("throws when a file in the templates directory does not end with '.template'", async () => {
+        const currentDirectoryPath = await temporaryDirectories.create();
+        const temporaryDirectoryPath = await temporaryDirectories.create();
+
+        const templatesDirectoryPath = path.join(currentDirectoryPath, "templates");
+        await fs.mkdir(templatesDirectoryPath);
+        await fs.writeFile(path.join(templatesDirectoryPath, "notes.txt"), "not a template");
+
+        await expect(
+            renderTemplates(
+                currentDirectoryPath,
+                temporaryDirectoryPath,
+                renderValues.cliName,
+                renderValues.personalGithubUsername,
+                renderValues.personalName,
+                renderValues.personalEmail,
+            ),
+        ).rejects.toThrow("does not end with '.template'");
+    });
+});
