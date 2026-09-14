@@ -1,0 +1,29 @@
+name: Publish
+
+on:
+    push:
+        tags: ["v*"]
+
+jobs:
+    publish:
+        runs-on: ubuntu-slim
+        permissions:
+            contents: read
+            id-token: write
+        steps:
+            - name: Checkout Code
+              uses: actions/checkout@v7
+
+            - name: Set up Vite+
+              uses: voidzero-dev/setup-vp@v1.20.0
+              with:
+                  cache: true
+
+            - name: Install Dependencies
+              run: vp install
+
+            - name: Build Application
+              run: vp build
+
+            - name: Publish to npm
+              run: vp pm publish
