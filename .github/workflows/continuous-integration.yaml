@@ -23,10 +23,10 @@ jobs:
               run: vp install
 
             - name: Code Checks
-              run: vp check
+              run: vp run check
 
             - name: Run Tests
-              run: vp test
+              run: vp run test
 
             - name: Build Application
-              run: vp build
+              run: vp run build
