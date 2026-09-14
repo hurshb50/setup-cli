@@ -89,11 +89,11 @@ program
     .description("This tool helps to scaffold a CLI that you can publish to NPM.")
     .version(version)
     .argument("cli-name", "Name of the CLI")
-    .argument("personal-github-username", "Your github username")
-    .argument("personal-name", "Your personal name")
-    .argument("personal-email", "Your personal email")
+    .requiredOption("--personal-github-username <string>", "Your github username")
+    .requiredOption("--personal-name <string>", "Your personal name")
+    .requiredOption("--personal-email <string>", "Your personal email")
     .option("--directory <string>", "Path where the cli should be located (e.g. `../example`)")
-    .action(async (cliName, personalGithubUsername, personalName, personalEmail, { directory }) => {
+    .action(async (cliName, { personalGithubUsername, personalName, personalEmail, directory }) => {
         const cliDirectoryPath = directory ?? cliName;
         const cliDirectoryExists = existsSync(cliDirectoryPath);
 
