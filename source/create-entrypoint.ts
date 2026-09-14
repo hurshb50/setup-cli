@@ -11,6 +11,7 @@ export async function createEntrypoint(temporaryDirectoryPath: string, cliName: 
     await fs.mkdir(sourceDirectoryPath);
 
     const entrypointLines = [
+        "#!/usr/bin/env node",
         'import { program } from "@commander-js/extra-typings";',
         `program.name("${cliName}").version("0.0.0").description("TODO")`,
         "program.parse()",
