@@ -44,5 +44,17 @@
     "repository": {
         "type": "git",
         "url": "git+https://github.com/hurshb50/setup-cli.git"
-    }
+    },
+    "keywords": [
+        "cli",
+        "scaffold",
+        "scaffolding",
+        "generator",
+        "template",
+        "boilerplate",
+        "starter",
+        "typescript",
+        "vite",
+        "npx"
+    ]
 }
