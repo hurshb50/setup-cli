@@ -26,8 +26,8 @@
     },
     "devEngines": {
         "packageManager": {
-            "name": "bun",
-            "version": "1.4.2",
+            "name": "node",
+            "version": "24.21.0",
             "onFail": "download"
         }
     },
