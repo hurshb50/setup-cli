@@ -7,5 +7,5 @@ export async function installTemporaryDirectory(
 ): Promise<void> {
     childProcess.execSync("vp install", { cwd: temporaryDirectoryPath, stdio: "inherit" });
     await fs.cp(temporaryDirectoryPath, cliDirectoryPath, { recursive: true });
-    childProcess.execSync("git init", { cwd: cliDirectoryPath, stdio: "inherit" });
+    childProcess.execSync("git init -b main", { cwd: cliDirectoryPath, stdio: "inherit" });
 }
