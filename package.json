@@ -1,11 +1,11 @@
 {
     "name": "@hurshb50/setup-cli",
-    "version": "0.0.0",
+    "version": "0.0.1",
     "type": "module",
     "files": [
         "distribution"
     ],
-    "bin": "./distribution/setup-cli.js",
+    "bin": "./distribution/setup-cli.mjs",
     "scripts": {
         "build": "vp pack",
         "check": "vp check",
