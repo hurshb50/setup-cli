@@ -1,8 +1,21 @@
 name: Publish
 
 on:
-    push:
-        tags: ["v*"]
+    workflow_dispatch:
+        inputs:
+            bump:
+                description: Version Bump
+                required: true
+                default: patch
+                type: choice
+                options:
+                    - patch
+                    - minor
+                    - major
+
+concurrency:
+    group: publish
+    cancel-in-progress: false
 
 jobs:
     publish:
@@ -24,16 +37,22 @@ jobs:
             - name: Install Dependencies
               run: vp install
 
+            - name: Code Checks
+              run: vp check
+
+            - name: Run Tests
+              run: vp test
+
             - name: Build Application
               run: vp run build
 
-            - name: Publish to npm
-              run: vp pm publish
-
-            - name: Create GitHub Release
-              env:
-                  GH_TOKEN: ${{ github.token }}
+            - name: Bump Version
               run: |
-                  previous="$(git describe --tags --abbrev=0 "$GITHUB_REF_NAME^")"
-                  git log --reverse --no-merges --pretty="- %s" "$previous..$GITHUB_REF_NAME^" > notes.md
-                  gh release create "$GITHUB_REF_NAME" --title "$GITHUB_REF_NAME" --notes-file notes.md
+                  git config user.name "github-actions[bot]"
+                  git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+                  vp pm version "${{ inputs.bump }}"
+                  git push origin HEAD
+                  git push origin "v$(node -p "require('./package.json').version")"
+
+            - name: Publish to npm
+              run: vp pm stage publish
