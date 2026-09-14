@@ -13,7 +13,7 @@ const { execSyncMock } = vi.hoisted(() => ({ execSyncMock: vi.fn() }));
 vi.mock("child_process", () => ({ default: { execSync: execSyncMock } }));
 
 describe("installTemporaryDirectory", () => {
-    it("installs dependencies in the temporary directory and copies it to the CLI directory", async () => {
+    it("installs dependencies in the temporary directory, copies it to the CLI directory, and initializes git", async () => {
         const temporaryDirectoryPath = await temporaryDirectories.create();
         await fs.writeFile(path.join(temporaryDirectoryPath, "example.txt"), "content");
 
@@ -23,5 +23,14 @@ describe("installTemporaryDirectory", () => {
 
         const copiedFileContent = await fs.readFile(path.join(cliDirectoryPath, "example.txt"), "utf8");
         expect(copiedFileContent).toBe("content");
+
+        expect(execSyncMock).toHaveBeenCalledWith("vp install", {
+            cwd: temporaryDirectoryPath,
+            stdio: "inherit",
+        });
+        expect(execSyncMock).toHaveBeenCalledWith("git init", {
+            cwd: cliDirectoryPath,
+            stdio: "inherit",
+        });
     });
 });

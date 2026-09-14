@@ -24,6 +24,7 @@ Pass `--directory <path>` to generate the project somewhere other than `./<cli-n
 
 - A Vite+ TypeScript project with a commander entrypoint at `source/<cli-name>.ts`
 - A scoped `package.json` wired for npm
+- A `.gitignore` and an initialized git repository
 - GitHub Actions workflows that stage npm releases and publish GitHub releases
 - A generated README that walks through the one-time GitHub and npm setup
 
