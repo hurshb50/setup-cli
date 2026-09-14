@@ -28,7 +28,7 @@ describe("installTemporaryDirectory", () => {
             cwd: temporaryDirectoryPath,
             stdio: "inherit",
         });
-        expect(execSyncMock).toHaveBeenCalledWith("git init", {
+        expect(execSyncMock).toHaveBeenCalledWith("git init -b main", {
             cwd: cliDirectoryPath,
             stdio: "inherit",
         });
