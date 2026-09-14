@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 import { program } from "@commander-js/extra-typings";
 import { name, version } from "../package.json";
 import { existsSync } from "fs";
