@@ -1,0 +1,44 @@
+name: Release
+
+on:
+    schedule:
+        - cron: "0 0 * * 0"
+    workflow_dispatch:
+
+concurrency:
+    group: release-poll
+    cancel-in-progress: false
+
+jobs:
+    release:
+        runs-on: ubuntu-slim
+        permissions:
+            contents: write
+        steps:
+            - name: Checkout Code
+              uses: actions/checkout@v7
+              with:
+                  fetch-depth: 0
+
+            - name: Release Published Version
+              env:
+                  GH_TOKEN: ${{ github.token }}
+              run: |
+                  version="$(curl -fsS https://registry.npmjs.org/-/package/@hurshb50/setup-cli/dist-tags | sed -n 's/.*"latest"[[:space:]]*:[[:space:]]*"\([^"]*\)".*/\1/p')"
+                  tag="v${version}"
+
+                  if ! git rev-parse --verify --quiet "refs/tags/${tag}" > /dev/null; then
+                      echo "${tag} is live on npm but has no git tag, skipping."
+                      exit 0
+                  fi
+
+                  if gh release view "$tag" > /dev/null 2>&1; then
+                      echo "Release ${tag} already exists."
+                      exit 0
+                  fi
+
+                  previous="$(git describe --tags --abbrev=0 "${tag}^")"
+                  git log --reverse --no-merges --pretty="- %s" "${previous}..${tag}^" > notes.md
+                  [ -s notes.md ] || echo "- No changes recorded." > notes.md
+
+                  gh release create "$tag" --title "$tag" --notes-file notes.md

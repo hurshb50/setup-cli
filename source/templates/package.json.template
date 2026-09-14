@@ -1,5 +1,5 @@
 {
-    "name": "@hurshb50/{{cliName}}",
+    "name": "@{{personalGithubUsername}}/{{cliName}}",
     "version": "0.0.0",
     "type": "module",
     "files": [
@@ -32,15 +32,15 @@
         }
     },
     "description": "TODO",
-    "homepage": "https://github.com/hurshb50/{{cliName}}#readme",
+    "homepage": "https://github.com/{{personalGithubUsername}}/{{cliName}}#readme",
     "bugs": {
-        "url": "https://github.com/hurshb50/{{cliName}}/issues"
+        "url": "https://github.com/{{personalGithubUsername}}/{{cliName}}/issues"
     },
     "license": "MIT",
-    "author": "Hursh Patel <hurshb50@gmail.com>",
+    "author": "{{personalName}} <{{personalEmail}}>",
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/hurshb50/{{cliName}}.git"
+        "url": "git+https://github.com/{{personalGithubUsername}}/{{cliName}}.git"
     },
     "publishConfig": {
         "access": "public"

@@ -24,6 +24,9 @@ async function renderTemplates(
     currentDirectoryPath: string,
     temporaryDirectoryPath: string,
     cliName: string,
+    personalGithubUsername: string,
+    personalName: string,
+    personalEmail: string,
 ): Promise<void> {
     const templatesDirectoryPath = path.join(currentDirectoryPath, "templates");
     const templateFileNames = await fs.readdir(templatesDirectoryPath);
@@ -41,7 +44,14 @@ async function renderTemplates(
         const templateFileBuffer = await fs.readFile(templateFilePath);
         const templateFileContent = templateFileBuffer.toString();
         const renderTemplate = handlebars.compile(templateFileContent);
-        const renderedFileContent = renderTemplate({ cliName });
+
+        const renderedFileContent = renderTemplate({
+            cliName,
+            personalGithubUsername,
+            personalName,
+            personalEmail,
+        });
+
         const renderedFileName = templateFileName.replace(".template", "");
         const renderedFilePath = path.join(temporaryDirectoryPath, renderedFileName);
         await fs.writeFile(renderedFilePath, renderedFileContent);
@@ -78,19 +88,30 @@ program
     .name(name)
     .description("This tool helps to scaffold a CLI that you can publish to NPM.")
     .version(version)
-    .argument("path", "Path that ends with the cli name like 'example-cli' or '../example-cli'")
-    .action(async (cliDirectoryPath) => {
+    .argument("cli-name", "Name of the CLI")
+    .argument("personal-github-username", "Your github username")
+    .argument("personal-name", "Your personal name")
+    .argument("personal-email", "Your personal email")
+    .option("--directory <string>", "Path where the cli should be located (e.g. `../example`)")
+    .action(async (cliName, personalGithubUsername, personalName, personalEmail, { directory }) => {
+        const cliDirectoryPath = directory ?? cliName;
         const cliDirectoryExists = existsSync(cliDirectoryPath);
 
         if (cliDirectoryExists) throw new Error(`CLI directory already exists at '${cliDirectoryPath}'.`);
 
         const temporaryDirectoryPath = await createTemporaryDirectory();
         const currentDirectoryPath = import.meta.dirname;
-        const cliName = path.basename(cliDirectoryPath);
 
         await Promise.all([
             copyAssetsDirectory(currentDirectoryPath, temporaryDirectoryPath),
-            renderTemplates(currentDirectoryPath, temporaryDirectoryPath, cliName),
+            renderTemplates(
+                currentDirectoryPath,
+                temporaryDirectoryPath,
+                cliName,
+                personalGithubUsername,
+                personalName,
+                personalEmail,
+            ),
             createEntrypoint(temporaryDirectoryPath, cliName),
         ]);
 

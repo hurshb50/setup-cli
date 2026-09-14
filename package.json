@@ -39,11 +39,8 @@
     "publishConfig": {
         "access": "public"
     },
-    "description": "This tool helps to scaffold a CLI that you can publish to NPM.",
+    "description": "This tool helps to scaffold a CLI that you can publish to NPM with Vite+.",
     "homepage": "https://github.com/hurshb50/setup-cli#readme",
-    "bugs": {
-        "url": "https://github.com/hurshb50/setup-cli/issues"
-    },
     "license": "MIT",
     "author": "Hursh Patel <hurshb50@gmail.com>",
     "repository": {

@@ -1,8 +1,4 @@
 import { defineConfig } from "vite-plus";
-import path from "path";
-
-const distributionDirectory = path.join(import.meta.dirname, "distribution");
-const assetsDirectory = path.join(distributionDirectory, "assets");
 
 const configuration = defineConfig({
     fmt: {
@@ -20,13 +16,7 @@ const configuration = defineConfig({
     pack: {
         entry: "./source/setup-cli.ts",
         outDir: "distribution",
-        copy: [
-            "templates",
-            { from: ".zed", to: assetsDirectory },
-            { from: ".gitignore", to: assetsDirectory },
-            { from: "AGENTS.md", to: assetsDirectory },
-            { from: "tsconfig.json", to: assetsDirectory },
-        ],
+        copy: ["source/assets", "source/templates"],
     },
     test: { passWithNoTests: true },
 });
