@@ -48,8 +48,6 @@ jobs:
 
             - name: Bump Version
               run: |
-                  git status --porcelain
-                  git --no-pager diff package-lock.json
                   git config user.name "github-actions[bot]"
                   git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
                   vp pm version "${{ inputs.bump }}"
