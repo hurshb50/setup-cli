@@ -15,8 +15,9 @@
     },
     "dependencies": {
         "@commander-js/extra-typings": "^15.0.0",
-        "@types/bun": "latest",
-        "bumpp": "^11.1.0",
+    },
+    "devDependencies": {
+        "@types/node": "^22.20.2",
         "typescript": "^7.0.2",
         "vite": "npm:@voidzero-dev/vite-plus-core@0.3.1",
         "vite-plus": "^0.2.4"
