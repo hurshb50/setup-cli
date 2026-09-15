@@ -11,11 +11,10 @@ export async function renderTemplates(
     personalEmail: string,
 ): Promise<void> {
     const templatesDirectoryPath = path.join(currentDirectoryPath, "templates");
-    const templateFileNames = await fs.readdir(templatesDirectoryPath);
+    const templateFilePaths = await findTemplateFilePaths(templatesDirectoryPath);
 
-    const pendingWrites = templateFileNames.map(async (templateFileName) => {
-        const templateFileIsNotValid = templateFileName.endsWith(".template") !== true;
-        const templateFilePath = path.join(templatesDirectoryPath, templateFileName);
+    const pendingWrites = templateFilePaths.map(async (templateFilePath) => {
+        const templateFileIsNotValid = templateFilePath.endsWith(".template") !== true;
 
         if (templateFileIsNotValid) {
             throw new Error(
@@ -34,10 +33,33 @@ export async function renderTemplates(
             personalEmail,
         });
 
-        const renderedFileName = templateFileName.replace(".template", "");
-        const renderedFilePath = path.join(temporaryDirectoryPath, renderedFileName);
+        const renderedFileRelativePath = path
+            .relative(templatesDirectoryPath, templateFilePath)
+            .replace(/\.template$/, "");
+
+        const renderedFilePath = path.join(temporaryDirectoryPath, renderedFileRelativePath);
+        await fs.mkdir(path.dirname(renderedFilePath), { recursive: true });
         await fs.writeFile(renderedFilePath, renderedFileContent);
     });
 
     await Promise.all(pendingWrites);
+}
+
+async function findTemplateFilePaths(directoryPath: string): Promise<string[]> {
+    const entryNames = await fs.readdir(directoryPath);
+
+    const pendingTemplateFilePaths = entryNames.map(async (entryName) => {
+        const entryPath = path.join(directoryPath, entryName);
+        const entryStats = await fs.stat(entryPath);
+
+        if (entryStats.isDirectory()) {
+            return findTemplateFilePaths(entryPath);
+        }
+
+        return [entryPath];
+    });
+
+    const nestedTemplateFilePaths = await Promise.all(pendingTemplateFilePaths);
+
+    return nestedTemplateFilePaths.flat();
 }

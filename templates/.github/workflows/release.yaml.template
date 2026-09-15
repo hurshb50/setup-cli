@@ -24,7 +24,7 @@ jobs:
               env:
                   GH_TOKEN: ${{ github.token }}
               run: |
-                  version="$(curl -fsS https://registry.npmjs.org/-/package/@hurshb50/setup-cli/dist-tags | sed -n 's/.*"latest"[[:space:]]*:[[:space:]]*"\([^"]*\)".*/\1/p')"
+                  version="$(curl -fsS https://registry.npmjs.org/-/package/@{{personalGithubUsername}}/{{cliName}}/dist-tags | sed -n 's/.*"latest"[[:space:]]*:[[:space:]]*"\([^"]*\)".*/\1/p')"
                   tag="v${version}"
 
                   if ! git rev-parse --verify --quiet "refs/tags/${tag}" > /dev/null; then

@@ -47,6 +47,34 @@ describe("renderTemplates", () => {
         expect(JSON.parse(packageJsonContent)).toEqual({ name: "@octocat/my-cli" });
     });
 
+    it("mirrors the templates directory structure", async () => {
+        const currentDirectoryPath = await temporaryDirectories.create();
+        const temporaryDirectoryPath = await temporaryDirectories.create();
+
+        const templatesDirectoryPath = path.join(currentDirectoryPath, "templates");
+        const workflowsDirectoryPath = path.join(templatesDirectoryPath, ".github", "workflows");
+        await fs.mkdir(workflowsDirectoryPath, { recursive: true });
+        await fs.writeFile(path.join(workflowsDirectoryPath, "release.yaml.template"), "name: Release {{cliName}}");
+
+        await renderTemplates(
+            currentDirectoryPath,
+            temporaryDirectoryPath,
+            renderValues.cliName,
+            renderValues.personalGithubUsername,
+            renderValues.personalName,
+            renderValues.personalEmail,
+        );
+
+        const releaseContent = await fs.readFile(
+            path.join(temporaryDirectoryPath, ".github", "workflows", "release.yaml"),
+            "utf8",
+        );
+        expect(releaseContent).toBe("name: Release my-cli");
+
+        const rootEntryNames = await fs.readdir(temporaryDirectoryPath);
+        expect(rootEntryNames).toEqual([".github"]);
+    });
+
     it("renders the repository templates without leaving unrendered placeholders", async () => {
         const repositoryRootPath = path.resolve(import.meta.dirname, "..");
         const temporaryDirectoryPath = await temporaryDirectories.create();
@@ -69,6 +97,13 @@ describe("renderTemplates", () => {
             url: "git+https://github.com/octocat/my-cli.git",
         });
         expect(packageJsonContent).not.toContain("{{");
+
+        const releaseWorkflowContent = await fs.readFile(
+            path.join(temporaryDirectoryPath, ".github", "workflows", "release.yaml"),
+            "utf8",
+        );
+        expect(releaseWorkflowContent).toContain("@octocat/my-cli/dist-tags");
+        expect(releaseWorkflowContent).not.toContain("{{");
     });
 
     it("throws when a file in the templates directory does not end with '.template'", async () => {
