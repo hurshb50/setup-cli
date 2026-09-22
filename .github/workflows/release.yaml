@@ -37,8 +37,13 @@ jobs:
                       exit 0
                   fi
 
-                  previous="$(git describe --tags --abbrev=0 "${tag}^")"
-                  git log --reverse --no-merges --pretty="- %s" "${previous}..${tag}^" > notes.md
+                  range="${tag}^"
+
+                  if previous="$(git describe --tags --abbrev=0 "${tag}^" 2>/dev/null)"; then
+                      range="${previous}..${tag}^"
+                  fi
+
+                  git log --reverse --no-merges --pretty="- %s" "${range}" > notes.md
                   [ -s notes.md ] || echo "- No changes recorded." > notes.md
 
                   gh release create "$tag" --title "$tag" --notes-file notes.md
