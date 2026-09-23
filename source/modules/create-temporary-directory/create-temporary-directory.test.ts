@@ -1,5 +1,5 @@
 import fs from "fs/promises";
-import { afterEach, describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it } from "vite-plus/test";
 import { createTemporaryDirectory } from "./create-temporary-directory";
 import { TemporaryDirectoryManager } from "./temporary-directory-manager";
 

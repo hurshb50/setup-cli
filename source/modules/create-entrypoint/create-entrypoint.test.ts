@@ -1,6 +1,6 @@
 import path from "path";
 import fs from "fs/promises";
-import { afterEach, describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it } from "vite-plus/test";
 import { createEntrypoint } from "./create-entrypoint";
 import { TemporaryDirectoryManager } from "../create-temporary-directory/temporary-directory-manager";
 
