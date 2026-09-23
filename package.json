@@ -9,9 +9,8 @@
     "scripts": {
         "build": "vp pack",
         "check": "vp check",
-        "check-fix": "vp check --fix",
-        "test": "vp test",
-        "test-watch": "vp test --watch"
+        "fix": "vp check --fix",
+        "test": "vp test"
     },
     "dependencies": {
         "@commander-js/extra-typings": "^15.0.0",
