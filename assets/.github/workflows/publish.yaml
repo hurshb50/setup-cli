@@ -17,8 +17,47 @@ concurrency:
     group: publish
     cancel-in-progress: false
 
+permissions:
+    contents: read
+
 jobs:
+    validation:
+        name: ${{ matrix.name }}
+        runs-on: ${{ matrix.runner }}
+        timeout-minutes: 45
+        strategy:
+            fail-fast: true
+            matrix:
+                include:
+                    - name: Code Checks
+                      runner: ubuntu-slim
+                      command: vp run check
+
+                    - name: Run Tests
+                      runner: ubuntu-slim
+                      command: vp run test
+
+                    - name: Build Application
+                      runner: ubuntu-slim
+                      command: vp run build
+        steps:
+            - name: Checkout Code
+              uses: actions/checkout@v7
+
+            - name: Set up Vite+
+              uses: voidzero-dev/setup-vp@v1.20.0
+              with:
+                  cache: true
+
+            - name: Install Dependencies
+              run: vp install --frozen-lockfile
+
+            - name: ${{ matrix.name }}
+              run: ${{ matrix.command }}
+
     publish:
+        needs:
+            - validation
         runs-on: ubuntu-slim
         permissions:
             contents: write
@@ -35,13 +74,7 @@ jobs:
                   cache: true
 
             - name: Install Dependencies
-              run: vp install
-
-            - name: Code Checks
-              run: vp check
-
-            - name: Run Tests
-              run: vp test
+              run: vp install --frozen-lockfile
 
             - name: Build Application
               run: vp run build

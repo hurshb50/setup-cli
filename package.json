@@ -28,13 +28,13 @@
     },
     "devEngines": {
         "runtime": {
-            "name": "node",
-            "version": "24.21.0",
+            "name": "bun",
+            "version": "1.4.2",
             "onFail": "download"
         },
         "packageManager": {
-            "name": "npm",
-            "version": "12.0.2",
+            "name": "pnpm",
+            "version": "12.5.1",
             "onFail": "download"
         }
     },
