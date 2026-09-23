@@ -1,8 +1,8 @@
 import path from "path";
 import fs from "fs/promises";
 import { afterEach, describe, expect, it } from "vitest";
-import { renderTemplates } from "../source/render-templates";
-import { TemporaryDirectoryManager } from "./temporary-directory-manager";
+import { renderTemplates } from "./render-templates";
+import { TemporaryDirectoryManager } from "../create-temporary-directory/temporary-directory-manager";
 
 const temporaryDirectories = new TemporaryDirectoryManager();
 
@@ -76,7 +76,7 @@ describe("renderTemplates", () => {
     });
 
     it("renders the repository templates without leaving unrendered placeholders", async () => {
-        const repositoryRootPath = path.resolve(import.meta.dirname, "..");
+        const repositoryRootPath = path.resolve(import.meta.dirname, "..", "..", "..");
         const temporaryDirectoryPath = await temporaryDirectories.create();
 
         await renderTemplates(

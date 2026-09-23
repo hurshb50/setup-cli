@@ -2,11 +2,11 @@
 import { program } from "@commander-js/extra-typings";
 import { name, version } from "../package.json";
 import { existsSync } from "fs";
-import { copyAssetsDirectory } from "./copy-assets-directory";
-import { createEntrypoint } from "./create-entrypoint";
-import { createTemporaryDirectory } from "./create-temporary-directory";
-import { installTemporaryDirectory } from "./install-temporary-directory";
-import { renderTemplates } from "./render-templates";
+import { copyAssetsDirectory } from "./modules/copy-assets-directory/copy-assets-directory";
+import { createEntrypoint } from "./modules/create-entrypoint/create-entrypoint";
+import { createTemporaryDirectory } from "./modules/create-temporary-directory/create-temporary-directory";
+import { installTemporaryDirectory } from "./modules/install-temporary-directory/install-temporary-directory";
+import { renderTemplates } from "./modules/render-templates/render-templates";
 
 program
     .name(name)
@@ -28,6 +28,7 @@ program
 
         await Promise.all([
             copyAssetsDirectory(currentDirectoryPath, temporaryDirectoryPath),
+            createEntrypoint(temporaryDirectoryPath, cliName),
             renderTemplates(
                 currentDirectoryPath,
                 temporaryDirectoryPath,
@@ -36,7 +37,6 @@ program
                 personalName,
                 personalEmail,
             ),
-            createEntrypoint(temporaryDirectoryPath, cliName),
         ]);
 
         await installTemporaryDirectory(temporaryDirectoryPath, cliDirectoryPath);

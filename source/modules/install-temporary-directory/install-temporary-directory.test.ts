@@ -1,8 +1,8 @@
 import path from "path";
 import fs from "fs/promises";
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { installTemporaryDirectory } from "../source/install-temporary-directory";
-import { TemporaryDirectoryManager } from "./temporary-directory-manager";
+import { installTemporaryDirectory } from "./install-temporary-directory";
+import { TemporaryDirectoryManager } from "../create-temporary-directory/temporary-directory-manager";
 
 const temporaryDirectories = new TemporaryDirectoryManager();
 

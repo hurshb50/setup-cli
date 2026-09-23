@@ -1,5 +1,5 @@
 import fs from "fs/promises";
-import { createTemporaryDirectory as createSystemTemporaryDirectory } from "../source/create-temporary-directory";
+import { createTemporaryDirectory as createSystemTemporaryDirectory } from "./create-temporary-directory";
 
 export class TemporaryDirectoryManager {
     private readonly trackedPaths = new Set<string>();
