@@ -2,7 +2,7 @@ import path from "path";
 import fs from "fs/promises";
 import { afterEach, describe, expect, it } from "vite-plus/test";
 import { renderTemplates } from "./render-templates";
-import { TemporaryDirectoryManager } from "../create-temporary-directory/temporary-directory-manager";
+import { TemporaryDirectoryManager } from "../temporary-directory/temporary-directory-manager";
 
 const temporaryDirectories = new TemporaryDirectoryManager();
 

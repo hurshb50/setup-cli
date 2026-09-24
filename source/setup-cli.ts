@@ -4,8 +4,8 @@ import { name, version } from "../package.json";
 import { existsSync } from "fs";
 import { copyAssetsDirectory } from "./modules/copy-assets-directory/copy-assets-directory";
 import { createEntrypoint } from "./modules/create-entrypoint/create-entrypoint";
-import { createTemporaryDirectory } from "./modules/create-temporary-directory/create-temporary-directory";
-import { installTemporaryDirectory } from "./modules/install-temporary-directory/install-temporary-directory";
+import { createTemporaryDirectory } from "./modules/temporary-directory/create-temporary-directory";
+import { installTemporaryDirectory } from "./modules/temporary-directory/install-temporary-directory";
 import { renderTemplates } from "./modules/render-templates/render-templates";
 
 program
