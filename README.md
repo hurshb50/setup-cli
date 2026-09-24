@@ -5,14 +5,8 @@ Scaffolds a TypeScript CLI that publishes to npm through GitHub. The generated p
 ## Usage
 
 ```bash
-setup-cli <cli-name> --personal-github-username <username> --personal-name <name> --personal-email <email>
+vpx @hurshb50/setup-cli <cli-name> --personal-github-username <username> --personal-name <name> --personal-email <email>
 ```
-
-```bash
-setup-cli hello-cli --personal-github-username hurshb50 --personal-name "Hursh Patel" --personal-email hurshb50@gmail.com
-```
-
-Run it anywhere with vpx.
 
 ```bash
 vpx @hurshb50/setup-cli hello-cli --personal-github-username hurshb50 --personal-name "Hursh Patel" --personal-email hurshb50@gmail.com
