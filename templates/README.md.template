@@ -45,13 +45,6 @@ CI uses npm's OIDC trusted publishing and staged publishing. No npm token. Nothi
 
 ## Releasing a version
 
-```bash
-gh workflow run publish.yaml -f bump=patch
-```
-
-Use `minor` or `major` instead of `patch` when it fits. Then approve the staged package.
-
-```bash
-vp pm stage list
-vp pm stage approve <stage-id>
-```
+1. Run the publish workflow on GitHub
+2. Approve the staged package on npm
+3. (Optional) Run the release workflow on GitHub
