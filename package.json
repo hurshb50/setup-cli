@@ -14,10 +14,8 @@
     },
     "dependencies": {
         "@commander-js/extra-typings": "^15.0.0",
-        "handlebars": "^4.7.9"
-    },
-    "devDependencies": {
         "@types/node": "^22.20.2",
+        "handlebars": "^4.7.9",
         "typescript": "^7.0.2",
         "vite": "npm:@voidzero-dev/vite-plus-core@0.3.1",
         "vite-plus": "^0.2.4"
@@ -27,8 +25,8 @@
     },
     "devEngines": {
         "runtime": {
-            "name": "bun",
-            "version": "1.4.2",
+            "name": "node",
+            "version": "26.10.0",
             "onFail": "download"
         },
         "packageManager": {
